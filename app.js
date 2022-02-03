@@ -3,6 +3,10 @@ const app = express();
 const port = 8000;
 const receipeRoute = require("./receipe.route");
 
+const { loadReceipesFromFile } = require("./db");
+
+loadReceipesFromFile();
+
 app.use(express.json());
 
 app.use("/receipes", receipeRoute);

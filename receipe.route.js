@@ -2,11 +2,17 @@ const { Router } = require("express");
 
 const router = Router();
 
-const { receipes } = require("./db");
+const {
+  receipes,
+  writeReceipesFile,
+  getAllReceipes,
+  addReceipe,
+} = require("./db");
 
 //return all receipes
 router.get("/", (req, res) => {
-  res.send(receipes);
+  const data = getAllReceipes();
+  res.send(data);
 });
 
 //return specific receipe
@@ -27,8 +33,8 @@ router.post("/", (req, res) => {
   if (!payload.name) {
     return res.status(404).send({ message: "receipe should have a name" });
   }
-  payload.id = new Date().getTime();
-  receipes.push(payload);
+  addReceipe(payload.name);
+  writeReceipesFile();
   return res.status(201).send(payload);
 });
 
