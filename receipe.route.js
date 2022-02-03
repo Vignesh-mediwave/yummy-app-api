@@ -1,18 +1,13 @@
+const db = require("better-sqlite3")("yummy.db", { fileMustExist: true });
+
 const { Router } = require("express");
 
 const router = Router();
 
-const {
-  receipes,
-  writeReceipesFile,
-  getAllReceipes,
-  addReceipe,
-} = require("./db");
-
 //return all receipes
 router.get("/", (req, res) => {
-  const data = getAllReceipes();
-  res.send(data);
+  const recipes = db.prepare("SELECT id,name FROM recipes;").all;
+  res.send(recipes);
 });
 
 //return specific receipe

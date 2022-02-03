@@ -13,3 +13,7 @@ npm run dev
 # postman
 
 to run a API in postman use http://localhost:8000/receipes
+
+# Database
+
+install sqlite3
