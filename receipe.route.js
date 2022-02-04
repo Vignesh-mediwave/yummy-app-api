@@ -1,25 +1,35 @@
 const db = require("better-sqlite3")("yummy.db", { fileMustExist: true });
 
 const { Router } = require("express");
+const { receipes } = require("./db");
 
 const router = Router();
 
 //return all receipes
 router.get("/", (req, res) => {
-  const recipes = db.prepare("SELECT id,name FROM recipes;").all;
+  const recipes = db.prepare("SELECT id,name FROM recipes;").all();
   res.send(recipes);
 });
 
 //return specific receipe
 
 router.get("/:id", (req, res) => {
-  const receipe = receipes.find((receipe) => receipe.id == req.params.id);
-  if (!receipe) {
+  const recipes = db
+    .prepare(
+      `SELECT recipes.id,recipes.name,receipe_text.text recipe_text
+    FROM
+    recipes
+    INNER JOIN receipe_text
+    ON recipes.id = receipe_text.receipe
+    WHERE recipes.id = ?;`
+    )
+    .get(req.params.id);
+  if (!recipes) {
     return res.status(404).json({
       message: `${req.params.id} not in the list`,
     });
   }
-  res.send(receipe);
+  res.send(recipes);
 });
 
 //add new receipe
